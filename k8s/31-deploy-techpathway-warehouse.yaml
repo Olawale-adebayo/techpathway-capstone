@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: techpathway-warehouse
+  namespace: techpathway
+  labels:
+    app: techpathway-warehouse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: techpathway-warehouse
+  template:
+    metadata:
+      labels:
+        app: techpathway-warehouse
+    spec:
+      containers:
+        - name: techpathway-warehouse
+          image: ${ECR_REGISTRY}/techpathway-warehouse:v1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5002
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5002
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5002
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 3

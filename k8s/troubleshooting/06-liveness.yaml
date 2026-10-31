@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: ts-live, namespace: troubleshooting}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: ts-live}}
+  template:
+    metadata: {labels: {app: ts-live}}
+    spec:
+      containers:
+        - name: ts-live
+          image: ${ECR_REGISTRY}/main-app:v1.0
+          ports: [{containerPort: 5111}]
+          resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: 500m, memory: 512Mi}}
+          readinessProbe: {httpGet: {path: /health, port: 5111}, initialDelaySeconds: 10, periodSeconds: 10}
+          livenessProbe: {httpGet: {path: /wrong-health, port: 5111}, initialDelaySeconds: 5, periodSeconds: 5, failureThreshold: 2}

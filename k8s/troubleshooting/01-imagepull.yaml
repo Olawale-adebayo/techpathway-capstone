@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: ts-imagepull, namespace: troubleshooting}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: ts-imagepull}}
+  template:
+    metadata: {labels: {app: ts-imagepull}}
+    spec:
+      containers:
+        - name: ts-imagepull
+          image: ${ECR_REGISTRY}/main-app:v9.9
+          ports: [{containerPort: 5111}]
+          resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: 500m, memory: 512Mi}}
+          readinessProbe: {httpGet: {path: /health, port: 5111}, initialDelaySeconds: 10, periodSeconds: 10}
+          livenessProbe: {httpGet: {path: /health, port: 5111}, initialDelaySeconds: 30, periodSeconds: 20}

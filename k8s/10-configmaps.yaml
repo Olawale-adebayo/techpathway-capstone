@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: action-messages-config
+  namespace: techpathway
+data:
+  SMTP_HOST: ""
+  SMTP_PORT: "587"
+  FROM_EMAIL: "orders@techpathway-bothcamp.example"
+  FROM_NAME: "The Techpathway Team, Weekly Class"
+  ALWAYS_CC_EMAIL: ""
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: main-app-config
+  namespace: techpathway
+data:
+  # Inside the cluster, apps reach each other by Service name.
+  NOTIFICATION_SERVICE_URL: "http://action-messages"
+  WAREHOUSE_SERVICE_URL: "http://techpathway-warehouse"
+  # Links shown in the browser. Placeholders now; Step 8 replaces them with
+  # the real load balancer addresses.
+  NOTIFICATION_PUBLIC_URL: "http://localhost:5001"
+  WAREHOUSE_PUBLIC_URL: "http://localhost:5002"
+  # Must NOT be "production": the app would force-redirect to https,
+  # and these load balancers only speak http.
+  FLASK_ENV: "development"

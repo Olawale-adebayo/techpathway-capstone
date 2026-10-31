@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: action-messages
+  namespace: techpathway
+spec:
+  type: LoadBalancer
+  selector:
+    app: action-messages
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: techpathway-warehouse
+  namespace: techpathway
+spec:
+  type: LoadBalancer
+  selector:
+    app: techpathway-warehouse
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5002
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-app
+  namespace: techpathway
+spec:
+  type: LoadBalancer
+  selector:
+    app: main-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5111
