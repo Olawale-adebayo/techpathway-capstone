@@ -2,3 +2,11 @@
 __pycache__/
 *.pyc
 .vscode/
+venv/
+.venv/
+*.zip
+aws/
+get_helm.sh
+*.pem
+*.csv
+*.db
